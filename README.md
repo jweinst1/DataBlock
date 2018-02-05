@@ -6,7 +6,7 @@
 
 ## Installation
 
-
+To use DataBlock, simply include the `src/Datablock.h` file in the source directory.
 
 ## License
 

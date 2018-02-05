@@ -5,4 +5,4 @@ NAME = DataBlockTest
 all: bin/$(NAME)
 
 bin/$(NAME): src/DataBlockTest.c
-	$(CC) $(L_FLAGS) $^ -o $@
+	$(CC) $(L_FLAGS) $^ -o $@ | mkdir -p bin
