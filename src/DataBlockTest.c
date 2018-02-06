@@ -11,8 +11,17 @@ void DataBlockTest_1(void)
 
 }
 
+void DataBlockTest_2(void)
+{
+        struct DataBlock* tester = DataBlock_new(50);
+        unsigned char newData[] = {3, 4, 5, 6};
+        DataBlock_write(tester, newData, 4);
+        TESTCASE_IS_EQ(tester->data[1], 4, 2);
+}
+
 
 int main(int argc, char const *argv[]) {
         DataBlockTest_1();
+        DataBlockTest_2();
         return 0;
 }

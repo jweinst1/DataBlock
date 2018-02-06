@@ -17,6 +17,9 @@
 #define DataBlock_SIZE(sobj) (sobj->cap + sizeof(struct DataBlock))
 #define DataBlock_SPACE(dblock) (dblock->cap - dblock->len)
 #define DataBlock_FITS(dblock, sizeN) ((dblock->cap - dblock->len) > sizeN)
+
+// Gets pointer corresponding to address at which new data will be written
+#define DataBlock_WRITER(dblock) (dblock->data + dblock->len)
 // The amount of
 #define DataBlock_ADDSPC 5
 
@@ -40,7 +43,7 @@ struct DataBlock
         unsigned char data[0];
 };
 
-
+// Allocates and creates a new datablock of some size.
 struct DataBlock* DataBlock_new(size_t size)
 {
         struct DataBlock* newblock = DataBlock_NEW(size);
@@ -57,6 +60,13 @@ void DataBlock_expand(struct DataBlock** block, size_t size)
         (*block)->cap += size + DataBlock_ADDSPC;
 };
 
+// Generic write function using memcpy
+void DataBlock_write(struct DataBlock* block, unsigned char* restrict data, size_t amount)
+{
+        if(!DataBlock_FITS(block, amount)) DataBlock_EXPAND(block, amount);
+        memcpy(DataBlock_WRITER(block), data, amount);
+        block->len += amount;
+};
 
 
 
