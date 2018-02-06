@@ -168,6 +168,14 @@ DataBlock_back(struct DataBlock* block)
         return block;
 };
 
+// Appends one data block to the back of another.
+void DataBlock_append(struct DataBlock* block1, struct DataBlock* block2)
+{
+        while(block1->next != NULL) block1 = block1->next;
+        block1->next = block2;
+        block2->prev = block1;
+};
+
 
 
 
