@@ -47,6 +47,11 @@
                 block2->prev = block1; \
 } while(0)
 
+#define DataBlock_DISCON(block1, block2) do { \
+                block1->next = NULL; \
+                block2->prev = NULL; \
+} while(0)
+
 #define DataBlock_IS_FRONT(block) (block->prev == NULL && block->next != NULL)
 
 #define DataBlock_IS_SING(block) (block->prev == NULL && block->next == NULL)
@@ -132,12 +137,37 @@ void DataBlock_put_block(struct DataBlock* block, struct DataBlock* other)
 
 // Sets the length of the block to 0, such that the block's old data can be overwritten.
 // This function conserves memory and does not free or allocate more memory.
-
 static inline void
 DataBlock_empty(struct DataBlock* block)
 {
         block->len = 0;
 };
+
+// Connects two blocks and returns the left side block
+static inline struct DataBlock*
+DataBlock_connect(struct DataBlock* block1, struct DataBlock* block2)
+{
+        block1->next = block2;
+        block2->prev = block1;
+        return block1;
+};
+
+// Gets the front of the chain of blocks
+static inline struct DataBlock*
+DataBlock_front(struct DataBlock* block)
+{
+        while(block->prev != NULL) block = block->prev;
+        return block;
+};
+
+// Gets the back of the chain of blocks.
+static inline struct DataBlock*
+DataBlock_back(struct DataBlock* block)
+{
+        while(block->next != NULL) block = block->next;
+        return block;
+};
+
 
 
 
