@@ -11,6 +11,7 @@ void DataBlockTest_1(void)
 
 }
 
+
 void DataBlockTest_2(void)
 {
         struct DataBlock* tester = DataBlock_new(50);

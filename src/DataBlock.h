@@ -16,11 +16,15 @@
 
 #define DataBlock_SIZE(sobj) (sobj->cap + sizeof(struct DataBlock))
 #define DataBlock_SPACE(dblock) (dblock->cap - dblock->len)
+
+// Macros used to determine if expansion is neccesary.
 #define DataBlock_FITS(dblock, sizeN) ((dblock->cap - dblock->len) > sizeN)
+#define DataBlock_FULL(dblock) (dblock->cap == dblock->len)
 
 // Gets pointer corresponding to address at which new data will be written
 #define DataBlock_WRITER(dblock) (dblock->data + dblock->len)
-// The amount of
+
+// The amount of extra space to add after expansion
 #define DataBlock_ADDSPC 5
 
 // Nullifies both ends of a data block
@@ -66,6 +70,14 @@ void DataBlock_write(struct DataBlock* block, unsigned char* restrict data, size
         if(!DataBlock_FITS(block, amount)) DataBlock_EXPAND(block, amount);
         memcpy(DataBlock_WRITER(block), data, amount);
         block->len += amount;
+};
+
+// Writes a single byte to the block.
+// Increments length and checks if full.
+void DataBlock_put_byte(struct DataBlock* block, unsigned char byte)
+{
+        if(DataBlock_FULL(block)) DataBlock_EXPAND(block, 20);
+        block->data[block->len++] = byte;
 };
 
 
