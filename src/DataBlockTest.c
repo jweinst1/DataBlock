@@ -56,7 +56,12 @@ void DataBlockTest_5(void)
 // Debug printing test.
 void DataBlockTest_6(void)
 {
-
+        puts("*****DEBUG TEST********");
+        struct DataBlock* tester = DataBlock_from_rep(5, 5);
+        DataBlock_append(tester, DataBlock_from_rep(66, 10));
+        DataBlock_append(tester, DataBlock_from_rep(66, 10));
+        DataBlock_print_debug(tester);
+        DataBlock_free_all(tester);
 };
 
 
@@ -66,5 +71,6 @@ int main(int argc, char const *argv[]) {
         DataBlockTest_3();
         DataBlockTest_4();
         DataBlockTest_5();
+        DataBlockTest_6();
         return 0;
 }

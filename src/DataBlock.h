@@ -90,7 +90,12 @@ struct DataBlock* DataBlock_from_data(unsigned char* data, size_t amount)
 // Creates and allocates a new data block with the byte byte repeated an amount of times.
 struct DataBlock* DataBlock_from_rep(unsigned char byte, size_t times)
 {
-
+        struct DataBlock* newblock = DataBlock_NEW(times + DataBlock_ADDSPC);
+        newblock->len = times;
+        newblock->cap = times + DataBlock_ADDSPC;
+        DataBlock_NULLIFY(newblock);
+        for(int i = 0; i < times; i++) newblock->data[i] = byte;
+        return newblock;
 };
 
 // Functional version of expansion macro.
@@ -204,6 +209,15 @@ void DataBlock_print_debug(struct DataBlock* block)
                 puts("Body::");
                 for(int i = 0; i < block->len; i++) printf("(%d.) -> %u\n", i, block->data[i]);
                 printf("___Block_%d_end___\n", blockCount++);
+                block = block->next;
+        }
+};
+
+void DataBlock_free_all(struct DataBlock* block)
+{
+        while(block != NULL)
+        {
+                free(block);
                 block = block->next;
         }
 };
