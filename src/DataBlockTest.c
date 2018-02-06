@@ -41,12 +41,24 @@ void DataBlockTest_4(void)
         free(writ);
 }
 
+// Tests appending method
+void DataBlockTest_5(void)
+{
+        struct DataBlock* tester = DataBlock_new(2);
+        struct DataBlock* tester2 = DataBlock_new(2);
+        DataBlock_put_byte(tester2, 55);
+        DataBlock_append(tester, tester2);
+        TESTCASE_IS_EQ((DataBlock_back(tester)->data[0]), 55, 5);
+        free(tester);
+        free(tester2);
+}
+
 
 int main(int argc, char const *argv[]) {
         DataBlockTest_1();
         DataBlockTest_2();
         DataBlockTest_3();
         DataBlockTest_4();
-
+        DataBlockTest_5();
         return 0;
 }

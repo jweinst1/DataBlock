@@ -8,6 +8,10 @@
 
 To use DataBlock, simply include the `src/Datablock.h` file in the source directory.
 
+### Tests
+
+To build the test suite, in the directory, run `make all`, then run the test executable, `./bin/DataBlockTest`.
+
 ## Mechanics
 
 DataBlock is based around a model of a two-way linked list, except every node also functions as a buffer itself. The blocks are singly allocated sections of data which had a header portion, that includes the previous block, next block, the capacity, and the length, and the body, which contains the actual binary data.
