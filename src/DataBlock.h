@@ -47,6 +47,10 @@
                 block2->prev = block1; \
 } while(0)
 
+#define DataBlock_IS_FRONT(block) (block->prev == NULL && block->next != NULL)
+
+#define DataBlock_IS_SING(block) (block->prev == NULL && block->next == NULL)
+
 struct DataBlock
 {
         struct DataBlock* next;
@@ -63,6 +67,18 @@ struct DataBlock* DataBlock_new(size_t size)
         newblock->len = 0;
         newblock->cap = size;
         DataBlock_NULLIFY(newblock);
+        return newblock;
+};
+
+// Creates and allocates a new data block from existing array of bytes
+struct DataBlock* DataBlock_from_data(unsigned char* data, size_t amount)
+{
+        // Cushions with some extra space
+        struct DataBlock* newblock = DataBlock_NEW(amount + DataBlock_ADDSPC);
+        newblock->len = amount;
+        newblock->cap = amount + DataBlock_ADDSPC;
+        DataBlock_NULLIFY(newblock);
+        memcpy(newblock->data, data, amount);
         return newblock;
 };
 
@@ -103,6 +119,24 @@ void DataBlock_put_long(struct DataBlock* block, long integ)
         if(!DataBlock_FITS(block, sizeof(long))) DataBlock_EXPAND(block, 20);
         *(long*)DataBlock_WRITER(block) = integ;
         block->len += sizeof(long);
+};
+
+// Writes another block into a current block
+void DataBlock_put_block(struct DataBlock* block, struct DataBlock* other)
+{
+        size_t amount = other->len;
+        if(!DataBlock_FITS(block, amount)) DataBlock_EXPAND(block, amount);
+        memcpy(DataBlock_WRITER(block), other->data, amount);
+        block->len += amount;
+};
+
+// Sets the length of the block to 0, such that the block's old data can be overwritten.
+// This function conserves memory and does not free or allocate more memory.
+
+static inline void
+DataBlock_empty(struct DataBlock* block)
+{
+        block->len = 0;
 };
 
 

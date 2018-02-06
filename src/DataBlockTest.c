@@ -12,7 +12,6 @@ void DataBlockTest_1(void)
 
 }
 
-
 void DataBlockTest_2(void)
 {
         struct DataBlock* tester = DataBlock_new(50);
@@ -31,10 +30,22 @@ void DataBlockTest_3(void)
         free(tester);
 }
 
+void DataBlockTest_4(void)
+{
+        struct DataBlock* tester = DataBlock_new(50);
+        unsigned char newData[] = {3, 4, 5, 6, 66};
+        struct DataBlock* writ = DataBlock_from_data(newData, 5);
+        DataBlock_put_block(tester, writ);
+        TESTCASE_IS_EQ(tester->data[4], 66, 4);
+        free(tester);
+        free(writ);
+}
+
 
 int main(int argc, char const *argv[]) {
         DataBlockTest_1();
         DataBlockTest_2();
         DataBlockTest_3();
+        DataBlockTest_4();
         return 0;
 }
