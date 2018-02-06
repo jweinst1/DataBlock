@@ -53,6 +53,12 @@ void DataBlockTest_5(void)
         free(tester2);
 }
 
+// Debug printing test.
+void DataBlockTest_6(void)
+{
+
+};
+
 
 int main(int argc, char const *argv[]) {
         DataBlockTest_1();

@@ -87,6 +87,12 @@ struct DataBlock* DataBlock_from_data(unsigned char* data, size_t amount)
         return newblock;
 };
 
+// Creates and allocates a new data block with the byte byte repeated an amount of times.
+struct DataBlock* DataBlock_from_rep(unsigned char byte, size_t times)
+{
+
+};
+
 // Functional version of expansion macro.
 void DataBlock_expand(struct DataBlock** block, size_t size)
 {
@@ -174,6 +180,32 @@ void DataBlock_append(struct DataBlock* block1, struct DataBlock* block2)
         while(block1->next != NULL) block1 = block1->next;
         block1->next = block2;
         block2->prev = block1;
+};
+
+// Attaches a data block to the left most side of another block.
+void DataBlock_push(struct DataBlock* block1, struct DataBlock* block2)
+{
+        while(block1->prev != NULL) block1 = block1->prev;
+        block1->prev = block2;
+        block2->next = block1;
+};
+
+// Prints out very detailed information for a data block, and it's linked blocks.
+// Includes memory addresses, enumerated bytes, etc.
+void DataBlock_print_debug(struct DataBlock* block)
+{
+        int blockCount = 1;
+        while(block != NULL)
+        {
+                printf("___Block_%d_______\n", blockCount);
+                puts("Header::");
+                printf("@self = %p\n@next = %p\n@prev = %p\n", block, block->next, block->prev);
+                printf("@length = %lu\n@capacity = %lu\n", block->len, block->cap);
+                puts("Body::");
+                for(int i = 0; i < block->len; i++) printf("(%d.) -> %u\n", i, block->data[i]);
+                printf("___Block_%d_end___\n", blockCount++);
+                block = block->next;
+        }
 };
 
 
