@@ -24,6 +24,9 @@
 // Gets pointer corresponding to address at which new data will be written
 #define DataBlock_WRITER(dblock) (dblock->data + dblock->len)
 
+// Gets a casted pointer corresponding to the address at which new data will be written.
+#define DataBlock_WRITE_TYPE(dblock, type) (type*)(dblock->data + dblock->len)
+
 // The amount of extra space to add after expansion
 #define DataBlock_ADDSPC 5
 
@@ -37,6 +40,12 @@
                 dblock = realloc(dblock, dblock->cap + amount + DataBlock_ADDSPC); \
                 dblock->cap += amount + DataBlock_ADDSPC; \
 } while (0)
+
+// Links two data blocks together
+#define DataBlock_CONNCET(block1, block2) do { \
+                block1->next = block2; \
+                block2->prev = block1; \
+} while(0)
 
 struct DataBlock
 {
@@ -78,6 +87,22 @@ void DataBlock_put_byte(struct DataBlock* block, unsigned char byte)
 {
         if(DataBlock_FULL(block)) DataBlock_EXPAND(block, 20);
         block->data[block->len++] = byte;
+};
+
+// Writes a 32-bit integer into the block
+void DataBlock_put_int(struct DataBlock* block, int integ)
+{
+        if(!DataBlock_FITS(block, sizeof(int))) DataBlock_EXPAND(block, 20);
+        *(int*)DataBlock_WRITER(block) = integ;
+        block->len += sizeof(int);
+};
+
+// Writes a 64-bit integer into the block
+void DataBlock_put_long(struct DataBlock* block, long integ)
+{
+        if(!DataBlock_FITS(block, sizeof(long))) DataBlock_EXPAND(block, 20);
+        *(long*)DataBlock_WRITER(block) = integ;
+        block->len += sizeof(long);
 };
 
 
