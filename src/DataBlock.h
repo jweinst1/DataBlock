@@ -1,9 +1,9 @@
 #ifndef DATA_BLOCK_HEADER
 #define DATA_BLOCK_HEADER
 /** DataBlock
- * author = Joshua Weinstein
- * github = jweinst1
- * email = jweinst1@berkeley.edu
+ * @author = Joshua Weinstein
+ * @github = jweinst1
+ * @email = jweinst1@berkeley.edu
  */
 
 #include <stdio.h>
